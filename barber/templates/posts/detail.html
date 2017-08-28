@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import '_forms.html' as forms %}
+
+{% block page_header %}
+  <div class="page-header">
+    <h1 class="post-title">{{ post.title }}</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% if post.body %}
+    {% if post.post_type == 'Quote' %}
+      <blockquote>{{ post.body }}</blockquote>
+      <p class="post-subtitle">{{ post.author }}</p>
+    {% else %}
+      <p class="post-subtitle">{{ post.body }}</p>
+    {% endif %}
+  {% endif %}
+  {% if post.embed_code %}
+    {{ post.embed_code|safe() }}
+  {% endif %}
+  {% if post.image_url %}
+    <p><img class = "img_posts" src="{{ post.image_url }}" /><p>
+    <p><img class = "img_posts" src="{{ post.image_url_2 }}" /><p>
+  {% endif %}
+  <p class="post-meta">{{ post.created_at.strftime('%H:%M %Y-%m-%d') }}</p>
+  <hr>
+  <h2>Коментарі</h2>
+  {% if post.comments %}
+    {% for comment in post.comments %}
+       <p>{{ comment.body }}</p>
+       <p><strong>{{ comment.author }}</strong> <small>o {{ comment.created_at.strftime('%H:%M %Y-%m-%d') }}</small></p>
+      {{ comment.text }}
+    {% endfor %}
+  {% endif %}
+  <hr>
+  <h2>Залиште коментарій</h2>
+  <form action="." method="post">
+    {{ forms.render(form) }}
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Коментувати">
+    </div>
+  </form>
+  <hr>
+{% endblock %}
